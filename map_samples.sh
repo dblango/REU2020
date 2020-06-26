@@ -7,7 +7,7 @@
 #SBATCH -o slurm.%N.%j.out
 #SBATCH -e slurm.%N.%j.err
 
-# submit this script from your /n/holyscratch01/informatics/blangod/hetAtr/00_genome by typing sbatch map_samples.sh
+# submit this script from your /n/holyscratch01/informatics/blangod/hetAtr/ by typing sbatch map_samples.sh
 
 module load bwa/0.7.17-fasrc01
 
