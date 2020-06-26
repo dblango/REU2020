@@ -7,7 +7,7 @@
 #SBATCH -o slurm.%N.%j.out
 #SBATCH -e slurm.%N.%j.err
 
-# submit this script from your /n/holyscratch01/informatics/hetAtr by typing sbatch make_ref.sh
+# submit this script from your /n/holyscratch01/informatics/hetAtr/00_genome by typing sbatch make_ref.sh
 
 
 module load bwa/0.7.17-fasrc01
