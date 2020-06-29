@@ -3,11 +3,11 @@
 #SBATCH -N 1
 #SBATCH -n 1
 #SBATCH --mem 8000
-#SBATCH -t 120
+#SBATCH -t 2:30
 #SBATCH -o slurm.%N.%j.out
 #SBATCH -e slurm.%N.%j.err
 
-# submit this script from your /n/holyscratch01/informatics/blangod/hetAtr/ by typing sbatch map_samples.sh
+# submit this script from /n/holyscratch01/informatics/blangod/hetAtr/ by typing sbatch map_samples.sh
 
 module load bwa/0.7.17-fasrc01
 
