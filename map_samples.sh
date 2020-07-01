@@ -4,8 +4,8 @@
 #SBATCH -n 1
 #SBATCH --mem 8000
 #SBATCH -t 0-04:00:00
-#SBATCH -o slurm.%N.%j.out
-#SBATCH -e slurm.%N.%j.err
+#SBATCH -o bwa_mem.%N.%j.out
+#SBATCH -e bwa_mem.%N.%j.err
 
 # submit this script from /n/holyscratch01/informatics/blangod/hetAtr/ by typing sbatch map_samples.sh
 
