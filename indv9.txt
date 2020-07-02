@@ -1,0 +1,4 @@
+hetAtr_ind09_L1_529.bam
+hetAtr_ind09_L1_530.bam
+hetAtr_ind09_L1_531.bam
+hetAtr_ind09_L1_532.bam
