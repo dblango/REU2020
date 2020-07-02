@@ -1,0 +1,4 @@
+hetAtr_ind06_L1_513.bam
+hetAtr_ind06_L1_514.bam
+hetAtr_ind06_L1_515.bam
+hetAtr_ind06_L1_516.bam
