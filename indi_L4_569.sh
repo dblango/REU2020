@@ -7,7 +7,7 @@
 #SBATCH -o bwa_mem.%N.%j.out
 #SBATCH -e bwa_mem.%N.%j.err
 
-# submit this script from /n/holyscratch01/informatics/blangod/hetAtr/ by typing sbatch map_samples.sh
+# submit this script from /n/holyscratch01/informatics/blangod/hetAtr/ by typing sbatch indi_L4_569.sh
 
 module load bwa/0.7.17-fasrc01
 
