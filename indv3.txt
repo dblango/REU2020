@@ -1,0 +1,8 @@
+hetAtr_ind03_L1_533.bam
+hetAtr_ind03_L1_534.bam
+hetAtr_ind03_L1_535.bam
+hetAtr_ind03_L1_536.bam
+hetAtr_ind03_L2_533.bam
+hetAtr_ind03_L2_534.bam
+hetAtr_ind03_L2_535.bam
+hetAtr_ind03_L2_536.bam
