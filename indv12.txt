@@ -1,0 +1,8 @@
+hetAtr_ind12_L4_565.bam
+hetAtr_ind12_L4_566.bam
+hetAtr_ind12_L4_567.bam
+hetAtr_ind12_L4_568.bam
+hetAtr_ind12_L4_569.bam
+hetAtr_ind12_L4_570.bam
+hetAtr_ind12_L4_571.bam
+hetAtr_ind12_L4_572.bam
