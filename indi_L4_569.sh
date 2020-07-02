@@ -12,4 +12,4 @@
 module load bwa/0.7.17-fasrc01
 
 #run mapping
-bwa mem -t 8 -R '@RG\tID:hetAtr_ind12_L4_569\tSM:hetAtr_ind12_L4_569' 00_genome/hetAtr hetAtr_ind12_L4_569_1.fastq.gz hetAtr_ind12_L4_569_1.fastq.gz > hetAtr_ind12_L4_569.sam
+bwa mem -t 8 -R '@RG\tID:hetAtr_ind12_L4_569\tSM:hetAtr_ind12_L4_569' 00_genome/hetAtr 01_fastqs/hetAtr_ind12_L4_569_1.fastq.gz 01_fastqs/hetAtr_ind12_L4_569_1.fastq.gz > hetAtr_ind12_L4_569.sam
