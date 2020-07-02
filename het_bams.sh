@@ -9,7 +9,7 @@
 
 # submit this script from /n/holyscratch01/informatics/blangod/hetAtr/ by typing sbatch het_bams.sh
 
-module load bwa/0.7.17-fasrc01
+module load samtools/1.10-fasrc01
 
 for file in *.sam;
 do
