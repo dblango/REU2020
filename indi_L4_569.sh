@@ -11,8 +11,5 @@
 
 module load bwa/0.7.17-fasrc01
 
-R1=$hetAtr_ind12_L4_569_1.fastq.gz
-name=`echo $R1 | sed 's/_1.fastq.gz\+//'`
-R2=${name}_2.fastq.gz
 #run mapping
-bwa mem -t 8 -R '@RG\tID:${name}\tSM:${name}' 00_genome/hetAtr $R1 $R2 > $name.sam
+bwa mem -t 8 -R '@RG\tID:$name\tSM:$name' 00_genome/hetAtr hetAtr_ind12_L4_569_1.fastq.gz hetAtr_ind12_L4_569_1.fastq.gz > hetAtr_ind12_L4_569.sam
