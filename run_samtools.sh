@@ -2,6 +2,6 @@
 
 for SP in /n/holyscratch01/informatics/blangod/hetAtr/01_fastqs/*.sam;
 do
-sbatch het_bams.sh $SP
+sbatch het_bams_sjsw.sh $SP
 sleep 1 
 done
