@@ -16,4 +16,4 @@ samtools sort -o $name.sort.bam $name.bam
 samtools index $name.sort.bam
 #samtools fixmate -r -m -O bam $name.sort.bam $name.fm.bam
 #samtools markdup -r -s -f $name.stats.out $name.fm.bam $name.clean.bam
-samtools quickcheck $name.final.bam
+samtools quickcheck $name.clean.bam
