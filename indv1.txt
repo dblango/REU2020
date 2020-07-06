@@ -1,8 +1,8 @@
-hetAtr_ind01_L1_573.bam
-hetAtr_ind01_L1_574.bam
-hetAtr_ind01_L1_575.bam
-hetAtr_ind01_L1_576.bam
-hetAtr_ind01_L1_577.bam
-hetAtr_ind01_L1_578.bam
-hetAtr_ind01_L1_579.bam
-hetAtr_ind01_L1_580.bam
+hetAtr_ind01_L1_573.sort.bam
+hetAtr_ind01_L1_574.sort.bam
+hetAtr_ind01_L1_575.sort.bam
+hetAtr_ind01_L1_576.sort.bam
+hetAtr_ind01_L1_577.sort.bam
+hetAtr_ind01_L1_578.sort.bam
+hetAtr_ind01_L1_579.sort.bam
+hetAtr_ind01_L1_580.sort.bam
