@@ -1,4 +1,4 @@
-hetAtr_ind13_L4_501.bam
-hetAtr_ind13_L4_502.bam
-hetAtr_ind13_L4_503.bam
-hetAtr_ind13_L4_504.bam
+hetAtr_ind13_L4_501.sort.bam
+hetAtr_ind13_L4_502.sort.bam
+hetAtr_ind13_L4_503.sort.bam
+hetAtr_ind13_L4_504.sort.bam
