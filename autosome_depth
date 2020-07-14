@@ -1,0 +1,25 @@
+#!/bin/bash
+#SBATCH -p shared
+#SBATCH -N 1
+#SBATCH -n 1
+#SBATCH --mem 8000
+#SBATCH -t 0-72:00:00
+#SBATCH -o autosomes_cov.%N.%j.out
+#SBATCH -e autosomes_cov.%N.%j.err
+
+module load samtools/1.10-fasrc01
+
+samtools depth -b autosomes_cov.bed -o auto_cov1.txt indv1.final.bam
+samtools depth -b autosomes_cov.bed -o auto_cov2.txt indv2.final.bam
+samtools depth -b autosomes_cov.bed -o auto_cov3.txt indv3.final.bam
+samtools depth -b autosomes_cov.bed -o auto_cov4.txt indv4.final.bam
+samtools depth -b autosomes_cov.bed -o auto_cov5.txt indv5.final.bam
+samtools depth -b autosomes_cov.bed -o auto_cov6.txt indv6.final.bam
+samtools depth -b autosomes_cov.bed -o auto_cov7.txt indv7.final.bam
+samtools depth -b autosomes_cov.bed -o auto_cov8.txt indv8.final.bam
+samtools depth -b autosomes_cov.bed -o auto_cov9.txt indv9.final.bam
+samtools depth -b autosomes_cov.bed -o auto_cov10.txt indv10.final.bam
+samtools depth -b autosomes_cov.bed -o auto_cov11.txt indv11.final.bam
+samtools depth -b autosomes_cov.bed -o auto_cov12.txt indv12.final.bam
+samtools depth -b autosomes_cov.bed -o auto_cov13.txt indv13.final.bam
+samtools depth -b autosomes_cov.bed -o auto_cov14.txt indv14.final.bam
