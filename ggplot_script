@@ -1,0 +1,141 @@
+
+auto <- read_delim('auto_cov1.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) %>%
+  mutate(chr = 'auto') %>%
+  select(chr, cov)
+sex <- read_delim('i1.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) %>%
+  mutate(chr = 'sex')
+as <- bind_rows(auto, sex)
+ggplot(as, aes(cov, color = chr,y = ..density..)) + geom_freqpoly(alpha = 0.5, position = 'identity', binwidth = 3)
+ggsave
+auto <- read_delim('auto_cov2.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) %>%
+  mutate(chr = 'auto') %>%
+  select(chr, cov)
+sex <- read_delim('i2.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) %>%
+  mutate(chr = 'sex')
+as <- bind_rows(auto, sex)
+ggplot(as, aes(cov, color = chr,y = ..density..)) + geom_freqpoly(alpha = 0.5, position = 'identity', binwidth = 3)
+ggsave
+auto <- read_delim('auto_cov3.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) %>%
+  mutate(chr = 'auto') %>%
+  select(chr, cov)
+sex <- read_delim('i3.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) %>%
+  mutate(chr = 'sex')
+as <- bind_rows(auto, sex)
+ggplot(as, aes(cov, color = chr,y = ..density..)) + geom_freqpoly(alpha = 0.5, position = 'identity', binwidth = 3)
+ggsave
+auto <- read_delim('auto_cov4.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) %>%
+  mutate(chr = 'auto') %>%
+  select(chr, cov)
+sex <- read_delim('i4.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) %>%
+  mutate(chr = 'sex')
+as <- bind_rows(auto, sex)
+ggplot(as, aes(cov, color = chr,y = ..density..)) + geom_freqpoly(alpha = 0.5, position = 'identity', binwidth = 3)
+ggsave
+auto <- read_delim('auto_cov5.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) %>%
+  mutate(chr = 'auto') %>%
+  select(chr, cov)
+sex <- read_delim('i5.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) %>%
+  mutate(chr = 'sex')
+as <- bind_rows(auto, sex)
+ggplot(as, aes(cov, color = chr,y = ..density..)) + geom_freqpoly(alpha = 0.5, position = 'identity', binwidth = 3)
+ggsave
+auto <- read_delim('auto_cov6.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) %>%
+  mutate(chr = 'auto') %>%
+  select(chr, cov)
+sex <- read_delim('i6.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) %>%
+  mutate(chr = 'sex')
+as <- bind_rows(auto, sex)
+ggplot(as, aes(cov, color = chr,y = ..density..)) + geom_freqpoly(alpha = 0.5, position = 'identity', binwidth = 3)
+ggsave
+auto <- read_delim('auto_cov7.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) %>%
+  mutate(chr = 'auto') %>%
+  select(chr, cov)
+sex <- read_delim('i7.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) %>%
+  mutate(chr = 'sex')
+as <- bind_rows(auto, sex)
+ggplot(as, aes(cov, color = chr,y = ..density..)) + geom_freqpoly(alpha = 0.5, position = 'identity', binwidth = 3)
+ggsave
+auto <- read_delim('auto_cov8.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) %>%
+  mutate(chr = 'auto') %>%
+  select(chr, cov)
+sex <- read_delim('i8.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) %>%
+  mutate(chr = 'sex')
+as <- bind_rows(auto, sex)
+ggplot(as, aes(cov, color = chr,y = ..density..)) + geom_freqpoly(alpha = 0.5, position = 'identity', binwidth = 3)
+ggsave
+auto <- read_delim('auto_cov9.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) %>%
+  mutate(chr = 'auto') %>%
+  select(chr, cov)
+sex <- read_delim('i9.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) %>%
+  mutate(chr = 'sex')
+as <- bind_rows(auto, sex)
+ggplot(as, aes(cov, color = chr,y = ..density..)) + geom_freqpoly(alpha = 0.5, position = 'identity', binwidth = 3)
+ggsave
+auto <- read_delim('auto_cov10.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) %>%
+  mutate(chr = 'auto') %>%
+  select(chr, cov)
+sex <- read_delim('i10.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) %>%
+  mutate(chr = 'sex')
+as <- bind_rows(auto, sex)
+ggplot(as, aes(cov, color = chr,y = ..density..)) + geom_freqpoly(alpha = 0.5, position = 'identity', binwidth = 3)
+ggsave
+auto <- read_delim('auto_cov11.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) %>%
+  mutate(chr = 'auto') %>%
+  select(chr, cov)
+sex <- read_delim('i11.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) %>%
+  mutate(chr = 'sex')
+as <- bind_rows(auto, sex)
+ggplot(as, aes(cov, color = chr,y = ..density..)) + geom_freqpoly(alpha = 0.5, position = 'identity', binwidth = 3)
+ggsave
+auto <- read_delim('auto_cov12.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) %>%
+  mutate(chr = 'auto') %>%
+  select(chr, cov)
+sex <- read_delim('i12.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) %>%
+  mutate(chr = 'sex')
+as <- bind_rows(auto, sex)
+ggplot(as, aes(cov, color = chr,y = ..density..)) + geom_freqpoly(alpha = 0.5, position = 'identity', binwidth = 3)
+ggsave
+auto <- read_delim('auto_cov13.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) %>%
+  mutate(chr = 'auto') %>%
+  select(chr, cov)
+sex <- read_delim('i13.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) %>%
+  mutate(chr = 'sex')
+as <- bind_rows(auto, sex)
+ggplot(as, aes(cov, color = chr,y = ..density..)) + geom_freqpoly(alpha = 0.5, position = 'identity', binwidth = 3)
+ggsave
+auto <- read_delim('auto_cov14.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) %>%
+  mutate(chr = 'auto') %>%
+  select(chr, cov)
+sex <- read_delim('i14.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) %>%
+  mutate(chr = 'sex')
+as <- bind_rows(auto, sex)
+ggplot(as, aes(cov, color = chr,y = ..density..)) + geom_freqpoly(alpha = 0.5, position = 'identity', binwidth = 3)
+ggsave
