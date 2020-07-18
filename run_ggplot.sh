@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -t 0-48:00
 #SBATCH -p shared
-#SBATCH --mem 15000
+#SBATCH --mem 64000
 #SBATCH -o ggplots_%j.out
 #SBATCH -e ggplots_%j.err
 
