@@ -9,4 +9,4 @@
 
 module load samtools/1.10-fasrc01
 
-samtools coverage fem.final.bam > fem_bam.out
+samtools coverage fem.final.bam > female.out
