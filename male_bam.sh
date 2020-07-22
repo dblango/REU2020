@@ -9,9 +9,5 @@
 
 module load samtools/1.10-fasrc01
 
-samtools merge -f -b indv1.txt indv1.final.bam male.final.bam
-samtools merge -f -b indv2.txt indv2.final.bam male.final.bam
-samtools merge -f -b indv3.txt indv3.final.bam male.final.bam
-samtools merge -f -b indv11.txt indv11.final.bam male.final.bam
-samtools merge -f -b indv12.txt indv12.final.bam male.final.bam
-samtools merge -f -b indv13.txt indv13.final.bam male.final.bam
+samtools merge male.final.bam indv1.final.bam indv2.final.bam indv3.final.bam indv11.final.bam indv12.final.bam indv13.final.bam
+
