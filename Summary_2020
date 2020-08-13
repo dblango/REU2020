@@ -1,0 +1,157 @@
+#MERGING INDIVIDUALS INTO A BAM FILE
+module load samtools/1.10-fasrc01
+
+samtools merge -f -b indv1.txt indv1.final.bam
+samtools merge -f -b indv2.txt indv2.final.bam
+samtools merge -f -b indv3.txt indv3.final.bam
+samtools merge -f -b indv4.txt indv4.final.bam
+samtools merge -f -b indv5.txt indv5.final.bam
+samtools merge -f -b indv6.txt indv6.final.bam
+samtools merge -f -b indv7.txt indv7.final.bam
+samtools merge -f -b indv8.txt indv8.final.bam
+samtools merge -f -b indv9.txt indv9.final.bam
+samtools merge -f -b indv10.txt indv10.final.bam
+samtools merge -f -b indv11.txt indv11.final.bam
+samtools merge -f -b indv12.txt indv12.final.bam
+samtools merge -f -b indv13.txt indv13.final.bam
+samtools merge -f -b indv14.txt indv14.final.bam
+
+
+#COMBINING AUTOSOMAL AND SEX CHROMOSOMES TO PLOT FOR EVERY INDIVIDUAL TO INDENTIFY GENDER
+library(tidyverse)
+auto <- read_delim('auto_cov1.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) %>%
+  mutate(chr = 'auto') %>%
+  select(chr, cov)
+sex <- read_delim('i1.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) %>%
+  mutate(chr = 'sex')
+as <- bind_rows(auto, sex)
+indv1 <- ggplot(as, aes(cov, color = chr,y = ..density..)) + geom_freqpoly(alpha = 0.5, position = 'identity', binwidth = 3)
+ggsave("indv1.pdf", indv1)
+
+#MERGED ALL FEMALES INTO ONE FILE AND ALL MALES INTO ONE FILE
+samtools merge fem.final.bam indv4.final.bam indv5.final.bam indv6.final.bam indv7.final.bam indv8.final.bam indv9.final.bam indv10.final.bam indv14.final.bam
+samtools merge male.final.bam indv1.final.bam indv2.final.bam indv3.final.bam indv11.final.bam indv12.final.bam indv13.final.bam
+
+#identified scaffolds associated with sex chromosomes by calculating covergae between males and females 
+samtools coverage fem.final.bam > female.out
+samtools coverage male.final.bam > male.out
+
+
+# FINDING THE TOTAL COVERAGE OF MALES AND FEMALES
+# MALES
+data <- read_delim('male_depth.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) 
+
+mean(data$cov)
+median(data$cov)
+Totalcovg <- qplot(data$cov,
+      geom="histogram",
+      binwidth = 0.5,  
+      main = "Histogram for Total Male Covergae ", 
+      xlab = "coverage",  
+      fill=I("blue"), 
+      col=I("red"), 
+      alpha=I(.2),
+      xlim=c(0,250))
+      
+# CALCULATING THE MEAN and MEDIAN of 3 AUTOSOMAL SCAFFOLDS IN MALES
+Scaf123mean <- data %>% group_by(scaffold) %>% summarize(Avgcov = mean(cov)) 
+Scaf123med <- data %>% group_by(scaffold) %>% summarize(Med = median(cov))
+
+mscaffold1 <- data %>% filter(scaffold == "CM021752.1")
+qplot(mscaffold1$cov, xlim=c(0,250))
+
+mscaffold2 <- data %>% filter(scaffold == "CM021757.1")
+qplot(mscaffold2$cov, xlim=c(0,250))
+
+mscaffold3 <- data %>% filter(scaffold == "CM021758.1")
+qplot(mscaffold3$cov, xlim=c(0,250))
+
+
+# FEMALES
+data2 <- read_delim('fem_depth.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) 
+
+mean.female <- mean(data2$cov)
+median.femle <- median(data2$cov)
+Totalcovgfem <- qplot(data2$cov,
+                    geom="histogram",
+                    binwidth = 0.5,  
+                    main = "Histogram for Total Female Covergae ", 
+                    xlab = "coverage",  
+                    fill=I("blue"), 
+                    col=I("red"), 
+                    alpha=I(.2),
+                    xlim=c(0,250))
+                    
+# CALCULATING THE MEAN and MEDIAN of 3 AUTOSOMAL SCAFFOLDS IN FEMALES
+Scaf123fean <- data2 %>% group_by(scaffold) %>% summarize(Avgcov = mean(cov))
+Scaf123fed <- data2 %>% group_by(scaffold) %>% summarize(Med = median(cov))
+
+fscaffold1 <- data2 %>% filter(scaffold == "CM021752.1")
+qplot(fscaffold1$cov, xlim=c(0,250))
+
+fscaffold2 <- data2 %>% filter(scaffold == "CM021757.1")
+qplot(fscaffold2$cov, xlim=c(0,250))
+
+fscaffold3 <- data2 %>% filter(scaffold == "CM021758.1")
+qplot(fscaffold3$cov, xlim=c(0,250))
+
+# Comparing Columns in MALES (V3= end position, V6=coverage, V7= mean depth, V9=mean mapq)
+ggplot(male.out, aes(x=V9, y=log10(V7))) + geom_point()
+ggplot(male.out, aes(x=log10(V3), y=V6)) + geom_point()
+ggplot(male.out, aes(x=V6, y=log10(V7))) + geom_point()
+ggplot(male.out, aes(x=V6, y=V9)) + geom_point()
+ggplot(male.out, aes(x=log10(V3), y=log10(V7))) + geom_point()
+
+
+# Comparing Columns in FEMALES
+ggplot(female.out, aes(x=V9, y=log10(V7))) + geom_point()
+ggplot(female.out, aes(x=log10(V3), y=V6)) + geom_point()
+ggplot(female.out, aes(x=V6, y=log10(V7))) + geom_point()
+ggplot(female.out, aes(x=V9, y=V6)) + geom_point()
+ggplot(female.out, aes(x=log10(V3), y=log10(V7))) + geom_point()
+
+#Calculating Normalized Depth
+male_aut_cov <- male.out %>% filter(V3 > 1e6) %>% mutate(weight = V3 * V7) %>% summarize(mean_dp_wt = sum(weight)/sum(V3)) %>% unlist()
+male_norm <- male.out %>% mutate(normdp = V7/male_aut_cov)
+
+female.out %>% filter(V3 > 1e6) %>% arrange(V7)
+female_aut_cov <- female.out %>% filter(V3 > 1e6, V7 > 30) %>% mutate(weight = V3 * V7) %>% summarize(mean_dp_wt = sum(weight)/sum(V3)) %>% unlist()
+female_norm <- female.out %>% mutate(normdp = V7/female_aut_cov)
+
+#MERGED normdp of males and females
+merged_norm <- full_join(male_norm, female_norm, by=c("V1" = "V1", "V3" = "V3"), suffix=c(".male", ".female")) %>% mutate(rel.dp = normdp.male / normdp.female)
+
+merged_norm %>% filter(V3 > 1e6, V6.female > 50, V9.female > 20) %>% ggplot(aes(x=normdp.male, y=normdp.female)) + geom_point()
+merged_norm %>% filter(V3 > 1e5, V6.female > 50, V9.female > 10) %>% ggplot(aes(x=normdp.male, y=normdp.female)) + geom_point()
+merged_norm %>% filter(V3 > 1e4, V6.female > 50, V9.female > 20) %>% ggplot(aes(x=normdp.male, y=normdp.female)) + geom_point()
+merged_norm %>% filter(V3 > 1e4, V6.female > 50, V9.female > 20, normdp.female < 10, normdp.male < 10) %>% ggplot(aes(x=normdp.male, y=normdp.female)) + geom_point()
+
+qplot(merged_norm$rel.dp, xlim=c(0,3))
+ggplot(merged_norm, aes(x=rel.dp)) + geom_histogram(bins=70)
+merged_norm %>% filter(rel.dp < 3) %>% ggplot(aes(x=rel.dp)) + geom_histogram(bins=50)
+
+# Filtering Relative Depth Plot W = 0 - .4, aut = .6 - 1.4, Z = 1.6 - 2
+scaffold_W <- merged_norm %>% select(V1, rel.dp) %>% filter((rel.dp > 0) & (rel.dp < .4))
+scaffold_auto <- merged_norm %>% select(V1, rel.dp) %>% filter((rel.dp > .6) & (rel.dp < 1.4))
+scaffold_Z <- merged_norm %>% select(V1, rel.sdp) %>% filter((rel.dp > 1.6) & (rel.dp < 2))
+scaff_undetermined <- merged_norm %>% select(V1, rel.dp) %>% filter(((rel.dp < .6) & (rel.dp > .4)) | ((rel.dp < 1.6) & (rel.dp > 1.4)))
+
+# Combining Z, W, and Auto chromosomes
+all_rel_dp <- rbind(scaffold_Z, scaffold_W, scaffold_auto)
+W <- scaffold_W %>% mutate(chr = "W")
+auto <- scaffold_auto %>% mutate(chr = "auto")
+Z <- scaffold_Z %>% mutate(chr = "Z")
+all_rel_dp <- rbind(Z, W, auto)
+all_rel_dp <- read_delim('all_rel_dp', delim = "\t", col_names = F) %>%
+  rename(scaffold = V1, rel.dp = V2)
+
+ggplot(all_rel_dp, aes(x=as.numeric(as.character(rel.dp)), col=chr)) + geom_histogram(bins=50)
+
+#CHALLENGED HYPOTHESE
+
+
+
