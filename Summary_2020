@@ -81,7 +81,7 @@ indv8
 ```
 # Above is the code that will generate the graph formulated below for individual 8. 
 ```{r}
-![](/n/holyscratch/informatics/blangod/hetAtr/02_bams/indv8.png)
+![](/n/holyscratch01/informatics/blangod/hetAtr/02_bams/indv8.png)
 ```
 #x-axis: coverage, y-axis: density, The autosomes and sex chromosomes of individual 8 shows that the rates of each set of chromosomes differ, this holds to be true in females because the autosomes have half the data that females hold as they have heterozygous sex chromosomes (ZW).
 
@@ -102,7 +102,7 @@ indv3
 # Above is the code that will generate the graph formulated below for individual 3. 
 
 ```{r}
-![Male Indvidual 3](/n/holyscratch/informatics/blangod/hetAtr/02_bams/indv3.png)
+![Male Indvidual 3](/n/holyscratch01/informatics/blangod/hetAtr/02_bams/indv3.png)
 ```
 #x-axis: coverage, y-axis: density, The autosomes and sex chromosomes of individual 3 shows that the rates of each set of chromosomes overlap each other. This holds to be true in males because the autosomes have the same the data that males hold as they have homozygous sex chromosomes (WW).
 
