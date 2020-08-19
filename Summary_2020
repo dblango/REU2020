@@ -25,13 +25,13 @@ library(tidyverse)
 ```
 
 ## Made a reference genome based on a female reference genome obtained from NCBI.
-```{bash, eval = F}
+```{{bash eval=FALSE, e=, include=FALSE}}
 module load bwa/0.7.17-fasrc01
 bwa index -p hetAtr 00_genome/GCA_011075105.1_BPBGC_Hatr_1.0_genomic.fna.gz
 ```
 
 ## The sample genes were mapped. A sam file was created for each sample. 
-```{bash, eval = F}
+```{{bash eval=FALSE, e=, include=FALSE}}
 module load bwa/0.7.17-fasrc01
 
 R1=$1
@@ -42,7 +42,7 @@ bwa mem -t 8 -R '@RG\tID:${name}\tSM:${name}' 00_genome/hetAtr $R1 $R2 > $name.s
 ```
 
 ## Once the same files were converted into bam files, one large bam file was made for each of the 14 indiviuals that contained all the information pertaining to the individual. 
-```{bash, eval = F}
+```{{bash eval=FALSE, e=, include=FALSE}}
 module load samtools/1.10-fasrc01
 samtools merge -f -b indv1.txt indv1.final.bam
 samtools merge -f -b indv2.txt indv2.final.bam
@@ -50,7 +50,7 @@ samtools merge -f -b indv3.txt indv3.final.bam
 ```
 
 ## The coverage of each indivdual was calculated in order to determine the scaffolds associated with sex chromosomes by comparing between males and females.  
-```{bash, eval = F}
+```{{bash eval=FALSE, e=, include=FALSE}}
 module load samtools/1.10-fasrc01
 samtools coverage indv1.final.bam > indv1.out
 samtools coverage indv2.final.bam > indv2.out
@@ -65,7 +65,7 @@ CM021758.1  1 5737139
 #Of the 14 individuals, Males and Females were identified since, compared to autosomes, males should have an overlapping rate and females should have a different rate. 
 
 #Example: FEMALE (indiviual 8)
-```{r, eval = F}
+```{r, eval = FALSE}
 library(tidyverse)
 library(knitr)
 auto <- read_delim('auto_cov8.txt', delim = '\t', col_names = F) %>%
@@ -86,7 +86,7 @@ indv8
 #x-axis: coverage, y-axis: density, The autosomes and sex chromosomes of individual 8 shows that the rates of each set of chromosomes differ, this holds to be true in females because the autosomes have half the data that females hold as they have heterozygous sex chromosomes (ZW).
 
 #Example: MALE (individual 3)
-```{r, eval = F}
+```{r, eval = FALSE}
 library(tidyverse)
 auto <- read_delim('auto_cov3.txt', delim = '\t', col_names = F) %>%
   rename(scaffold = X1, pos = X2, cov = X3) %>%
@@ -106,7 +106,7 @@ indv3
 #x-axis: coverage, y-axis: density, The autosomes and sex chromosomes of individual 3 shows that the rates of each set of chromosomes overlap each other. This holds to be true in males because the autosomes have the same the data that males hold as they have homozygous sex chromosomes (WW).
 
 ## Merged all females into one bam file and all males into another bam file
-```{r, eval = F}
+```{r, eval = FALSE}
 samtools merge fem.final.bam indv4.final.bam indv5.final.bam indv6.final.bam indv7.final.bam indv8.final.bam indv9.final.bam indv10.final.bam indv14.final.bam
 
 samtools merge male.final.bam indv1.final.bam indv2.final.bam indv3.final.bam indv11.final.bam indv12.final.bam indv13.final.bam
@@ -192,6 +192,8 @@ qplot(fscaffold3$cov, xlim=c(0,250))
 
 # Comparing Columns in MALES 
 ```{r}
+library(ggplot2)
+male.out <- read_delim('male.out', delim = '\t', col_names = F)
 ggplot(male.out, aes(x=V9, y=log10(V7))) + geom_point()
 ggplot(male.out, aes(x=log10(V3), y=V6)) + geom_point()
 ggplot(male.out, aes(x=V6, y=log10(V7))) + geom_point()
@@ -204,6 +206,8 @@ ggplot(male.out, aes(x=log10(V3), y=log10(V7))) + geom_point()
 
 # Comparing Columns in FEMALES
 ```{r}
+library(ggplot2)
+female.out <- read_delim('female.out', delim = '\t', col_names = F)
 ggplot(female.out, aes(x=V9, y=log10(V7))) + geom_point()
 ggplot(female.out, aes(x=log10(V3), y=V6)) + geom_point()
 ggplot(female.out, aes(x=V6, y=log10(V7))) + geom_point()
