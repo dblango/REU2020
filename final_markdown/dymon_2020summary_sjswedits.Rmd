@@ -1,0 +1,284 @@
+---
+title: "Analyzing Genome-scale data in (Non)Brood Parasitic Birds"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+  The 2020 Harvard Research for undergraduates Program was funded by the National Science Foundation. The proposed project revolved around analyzing the genome-scaled data of brood parasitic birds. Although the project focused on bird genomes, the skills that were learned are broadly applicable in many science-realted fields. It allowed me to understand that the methods and science behind evolutionary biology are central to the future of personalized medicine for humans as well. I learned how computational biology is relevant to the environment and boosted my skills in computer programming, which will be very useful in a variety of careers.
+  This project characterized patterns of genomic change in both parasitic and non-parasitic birds to test whether changes in the same specific genes and/or parallel patterns of genomic change have occurred in independent brood parasitic lineages. I was able to successfully identify unknown pieces of chromosomes and categorize them as Z-linked, W-linked, or autosomal. The project also examined the unique evolutionary dynamics of the sex-determination chromosomes. The results provided insight into fundamental questions about genome evolution and will provide other reseearchers with mapped genomes of speicies and reliable references that will further their research. Below you will find a breif summary of the codes and steps I used to analyze the data given to me. 
+
+
+To install the tidyverse package, use 
+`install.packages("tidyverse")`
+
+##In order to use the package you must load the package every time you start a new session
+```{r}
+library(tidyverse)
+library(knitr)
+```
+
+## Made a reference genome based on a female reference genome obtained from NCBI.
+```{bash, eval=FALSE}
+module load bwa/0.7.17-fasrc01
+bwa index -p hetAtr 00_genome/GCA_011075105.1_BPBGC_Hatr_1.0_genomic.fna.gz
+```
+
+## The sample genes were mapped. A sam file was created for each sample. 
+```{bash, eval=FALSE}
+module load bwa/0.7.17-fasrc01
+
+R1=$1
+name=`echo $R1 | sed 's/_1.fastq.gz\+//'`
+R2=${name}_2.fastq.gz
+#run mapping
+bwa mem -t 8 -R '@RG\tID:${name}\tSM:${name}' 00_genome/hetAtr $R1 $R2 > $name.sam
+```
+
+## Once the same files were converted into bam files, one large bam file was made for each of the 14 indiviuals that contained all the information pertaining to the individual. 
+```{bash, eval=FALSE}
+module load samtools/1.10-fasrc01
+samtools merge -f -b indv1.txt indv1.final.bam
+samtools merge -f -b indv2.txt indv2.final.bam
+samtools merge -f -b indv3.txt indv3.final.bam
+```
+
+## The coverage of each indivdual was calculated in order to determine the scaffolds associated with sex chromosomes by comparing between males and females.  
+```{bash, eval=FALSE}
+module load samtools/1.10-fasrc01
+samtools coverage indv1.final.bam > indv1.out
+samtools coverage indv2.final.bam > indv2.out
+```
+
+## Identified three possible autosomal scaffolds to explore coverage and compare other scaffolds against and make sure sex chromosomes were actually sex chromosomes in the males and females:
+CM021752.1  1 5558834
+CM021757.1  1 5765391
+CM021758.1  1 5737139
+
+#COMBINING AUTOSOMAL AND SEX CHROMOSOMES TO PLOT FOR EVERY INDIVIDUAL TO INDENTIFY GENDER
+#Of the 14 individuals, Males and Females were identified since, compared to autosomes, males should have an overlapping rate and females should have a different rate. 
+
+#Example: FEMALE (indiviual 8)
+```{r}
+auto <- read_delim('auto_cov8.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) %>%
+  mutate(chr = 'auto') %>%
+  select(chr, cov)
+sex <- read_delim('i8.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) %>%
+  mutate(chr = 'sex')
+as <- bind_rows(auto, sex) %>% filter(cov < 100)
+ggplot(as, aes(cov, color = chr,y = ..density..)) + geom_freqpoly(alpha = 0.5, position = 'identity', binwidth = 3)
+```
+
+#x-axis: coverage, y-axis: density, The autosomes and sex chromosomes of individual 8 shows that the rates of each set of chromosomes differ, this holds to be true in females because the autosomes have half the data that females hold as they have heterozygous sex chromosomes (ZW).
+
+#Example: MALE (individual 3)
+```{r}
+auto <- read_delim('auto_cov3.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) %>%
+  mutate(chr = 'auto') %>%
+  select(chr, cov)
+sex <- read_delim('i3.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) %>%
+  mutate(chr = 'sex')
+as <- bind_rows(auto, sex) %>% filter(cov < 100)
+ggplot(as, aes(cov, color = chr,y = ..density..)) + geom_freqpoly(alpha = 0.5, position = 'identity', binwidth = 3)
+```
+
+#x-axis: coverage, y-axis: density, The autosomes and sex chromosomes of individual 3 shows that the rates of each set of chromosomes overlap each other. This holds to be true in males because the autosomes have the same the data that males hold as they have homozygous sex chromosomes (WW).
+
+## Merged all females into one bam file and all males into another bam file
+```{bash, eval=FALSE}
+samtools merge fem.final.bam indv4.final.bam indv5.final.bam indv6.final.bam indv7.final.bam indv8.final.bam indv9.final.bam indv10.final.bam indv14.final.bam
+
+samtools merge male.final.bam indv1.final.bam indv2.final.bam indv3.final.bam indv11.final.bam indv12.final.bam indv13.final.bam
+```
+
+## Identified scaffolds associated with sex chromosomes by calculating covergae between the male and female larger combined files 
+```{bash, eval=FALSE}
+samtools coverage fem.final.bam > female.out
+samtools coverage male.final.bam > male.out
+```
+
+## FINDING THE TOTAL COVERAGE OF MALES AND FEMALES
+# MALES
+```{r}
+data <- read_delim('male_depth.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) 
+mean(data$cov)
+median(data$cov)
+Totalcovg <- qplot(data$cov,
+      geom="histogram",
+      binwidth = 0.5,  
+      main = "Histogram for Total Male Covergae ", 
+      xlab = "coverage",  
+      fill=I("blue"), 
+      col=I("red"), 
+      alpha=I(.2),
+      xlim=c(0,250))
+Totalcovg
+```
+#x-axis: coverage, y-axis: number of scaffolds. The total coverage was found for all males to ensure that important scaffolds were included.
+
+# Calculated the mean and median of the 3 autosomal scaffolds in males to ensure the numbers used for coverage and results obtained were reasonable and not largely skewed
+```{r}
+Scaf123mean <- data %>% group_by(scaffold) %>% summarize(Avgcov = mean(cov)) 
+Scaf123med <- data %>% group_by(scaffold) %>% summarize(Med = median(cov))
+
+mscaffold1 <- data %>% filter(scaffold == "CM021752.1")
+qplot(mscaffold1$cov, xlim=c(0,250))
+
+mscaffold2 <- data %>% filter(scaffold == "CM021757.1")
+qplot(mscaffold2$cov, xlim=c(0,250))
+
+mscaffold3 <- data %>% filter(scaffold == "CM021758.1")
+qplot(mscaffold3$cov, xlim=c(0,250))
+```
+#x-axis: coverage, y-axis: number of scaffolds. The mean and median coverage of each scaffold (mscaffold1$cov= CM021752.1, mscaffold2$cov= CM021757.1, mscaffold3$cov= CM021758.1) was found in males to see if numbers would differ, both mean and median values were similar. 
+
+# FEMALES
+```{r}
+data2 <- read_delim('fem_depth.txt', delim = '\t', col_names = F) %>%
+  rename(scaffold = X1, pos = X2, cov = X3) 
+
+mean.female <- mean(data2$cov)
+median.femle <- median(data2$cov)
+Totalcovgfem <- qplot(data2$cov,
+                    geom="histogram",
+                    binwidth = 0.5,  
+                    main = "Histogram for Total Female Covergae ", 
+                    xlab = "coverage",  
+                    fill=I("blue"), 
+                    col=I("red"), 
+                    alpha=I(.2),
+                    xlim=c(0,250))
+Totalcovgfem
+```
+#x-axis: coverage, y-axis: number of scaffolds. The total coverage was found for all females to ensure that important scaffolds were included.
+                    
+# Calculated the mean and median of the 3 autosomal scaffolds in females to ensure the numbers used for coverage and results obtained were reasonable and not largely skewed.
+```{r}
+Scaf123fean <- data2 %>% group_by(scaffold) %>% summarize(Avgcov = mean(cov))
+Scaf123fed <- data2 %>% group_by(scaffold) %>% summarize(Med = median(cov))
+
+fscaffold1 <- data2 %>% filter(scaffold == "CM021752.1")
+qplot(fscaffold1$cov, xlim=c(0,250))
+
+fscaffold2 <- data2 %>% filter(scaffold == "CM021757.1")
+qplot(fscaffold2$cov, xlim=c(0,250))
+
+fscaffold3 <- data2 %>% filter(scaffold == "CM021758.1")
+qplot(fscaffold3$cov, xlim=c(0,250))
+```
+#x-axis: coverage, y-axis: number of scaffolds. The mean and median coverage of each scaffold (fscaffold1$cov= CM021752.1, fscaffold2$cov= CM021757.1, fscaffold3$cov= CM021758.1) was found in males to see if numbers would differ, both mean and median values were similar.
+
+# Comparing Columns in MALES 
+```{r}
+male.out <- read_delim('male.out', delim = '\t', col_names = T)
+ggplot(male.out, aes(x=meanmapq, y=log10(meandepth))) + geom_point()
+ggplot(male.out, aes(x=log10(endpos), y=coverage)) + geom_point()
+ggplot(male.out, aes(x=coverage, y=log10(meandepth))) + geom_point()
+ggplot(male.out, aes(x=coverage, y=meanmapq)) + geom_point()
+ggplot(male.out, aes(x=log10(endpos), y=log10(meandepth))) + geom_point()
+```
+#X & Y axis (V3= end position, V6=coverage, V7= mean depth, V9=mean mapq)
+# Compared comlums to each other within males to see if correlation to each parameter matched hypotheses
+
+
+# Comparing Columns in FEMALES
+```{r}
+female.out <- read_delim('female.out', delim = '\t', col_names = T)
+ggplot(female.out, aes(x=meanmapq, y=log10(meandepth))) + geom_point()
+ggplot(female.out, aes(x=log10(endpos), y=coverage)) + geom_point()
+ggplot(female.out, aes(x=coverage, y=log10(meandepth))) + geom_point()
+ggplot(female.out, aes(x=meanmapq, y=coverage)) + geom_point()
+ggplot(female.out, aes(x=log10(endpos), y=log10(meandepth))) + geom_point()
+```
+#X & Y axis (V3= end position, V6=coverage, V7= mean depth, V9=mean mapq)
+# Compared comlums to each other within males to see if correlation to each parameter matched hypotheses
+
+#Calculating Normalized Depth for males and females which is a necessary step to compare data between two samples
+```{r}
+male_aut_cov <- male.out %>% filter(endpos > 1e6) %>% mutate(weight = endpos * meandepth) %>% summarize(mean_dp_wt = sum(weight)/sum(endpos)) %>% unlist()
+male_norm <- male.out %>% mutate(normdp = meandepth/male_aut_cov)
+
+female.out %>% filter(endpos > 1e6) %>% arrange(meandepth)
+female_aut_cov <- female.out %>% filter(endpos > 1e6, meandepth > 30) %>% mutate(weight = endpos * meandepth) %>% summarize(mean_dp_wt = sum(weight)/sum(endpos)) %>% unlist()
+female_norm <- female.out %>% mutate(normdp = meandepth/female_aut_cov)
+```
+
+
+#MERGED normdp of males and females in order to sort the scaffolds into appropriate ranges of chromosome Z, W, or autosome
+```{r}
+merged_norm <- full_join(male_norm, female_norm, by=c("#rname" = "#rname", "endpos" = "endpos"), suffix=c(".male", ".female")) %>% mutate(rel.dp = normdp.male / normdp.female)
+
+merged_norm %>% filter(endpos > 1e6, coverage.female > 50, meanmapq.female > 20) %>% ggplot(aes(x=normdp.male, y=normdp.female)) + geom_point()
+
+```
+# x-axis: normalized depth of males, y-axis: normalized depth of females. This graph shows that the normalized depths are directly correlated with eahc other.
+
+## Created a relative depth column for ease of distribution and graphs
+```{r}
+qplot(merged_norm$rel.dp, xlim=c(0,3))
+ggplot(merged_norm, aes(x=rel.dp)) + geom_histogram(bins=70)
+merged_norm %>% filter(rel.dp < 3) %>% ggplot(aes(x=rel.dp)) + geom_histogram(bins=50)
+```
+# x-axis: relative depth, y-axis: number of scaffolds. This graph shows a graphcal representation of the distribution of scaffolds that are sorted by a relative depth value. 
+
+# Filtering Relative Depth Plot by sorting out scaffolds by their relative depth values to label them as W, Z, or autosomal.
+W chromosomes = 0 - .4, autosomes = .6 - 1.4, Z chromosomes = 1.6 - 2
+
+```{r}
+scaffold_W <- merged_norm %>% select('#rname', rel.dp, coverage.female, coverage.male) %>% filter((rel.dp > 0) & (rel.dp < .4))
+
+scaffold_auto <- merged_norm %>% select('#rname', rel.dp, coverage.female, coverage.male) %>% filter((rel.dp > .6) & (rel.dp < 1.4))
+
+scaffold_Z <- merged_norm %>% select('#rname', rel.dp, coverage.female, coverage.male) %>% filter((rel.dp > 1.6) & (rel.dp < 2))
+
+scaff_undetermined <- merged_norm %>% select('#rname', rel.dp, coverage.female, coverage.male) %>% filter(((rel.dp < .6) & (rel.dp > .4)) | ((rel.dp < 1.6) & (rel.dp > 1.4)))
+```
+
+
+# Combining Z, W, and Auto chromosomes
+```{r}
+all_rel_dp <- rbind(scaffold_Z, scaffold_W, scaffold_auto)
+W <- scaffold_W %>% mutate(chr = "W")
+auto <- scaffold_auto %>% mutate(chr = "auto")
+Z <- scaffold_Z %>% mutate(chr = "Z")
+all_rel_dp <- rbind(Z, W, auto)
+
+
+ggplot(all_rel_dp, aes(x=as.numeric(as.character(rel.dp)), col=chr)) + geom_histogram(bins=50)
+```
+#x-axis: relative depth, y-axis: number of scaffolds. This graph shows a more defined representation of the scaffolds sorted by a relative depth value and lables them respectively as W-linked, autosomal, and Z-linked.
+
+### Challenging Hypotheses
+#Examining the coverage of females versus males in relation to the W chromosome
+```{r}
+femcov_v_malecovW <- all_rel_dp %>% filter(chr == "W") %>% ggplot(aes(x=coverage.female, y=coverage.male)) + geom_point(alpha = .2)
+femcov_v_malecovW
+```
+# x-axis: coverage of females, y-axis: coverage of males
+# This graph shows that the females have very high coverage, which entails that maybe some W chromosomes may be classified in error since they have the same trend as autosomes and have higher than expected male coverage, so they could share some homologous characteristics with the Z chromosome. 
+
+#Examining the coverage of females versus males in relation to the Z chromosome
+```{r}
+femcov_v_malecovZ <- all_rel_dp %>% filter(chr == "Z") %>% ggplot(aes(x=coverage.female, y=coverage.male)) + geom_point(alpha = .2)
+femcov_v_malecovZ
+```
+# x-axis: coverage of females, y-axis: coverage of males
+#This graph shows that the Z chromosome has a very high amount of male coverage, which is expected for a Z linked chromosome. 
+
+#Examining the coverage of females versus males in relation to the autosomes
+```{r}
+femcov_v_malecov_auto <- all_rel_dp %>% filter(chr == "auto") %>% ggplot(aes(x=coverage.female, y=coverage.male)) + geom_point(alpha = .2) 
+femcov_v_malecov_auto
+```
+# x-axis: coverage of females, y-axis: coverage of males
+# This graph shows exactly what we expected, that the coverage of autosomes have a very high male coverage.
