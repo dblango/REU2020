@@ -1,8 +1,8 @@
 ---
 title: "Analyzing Genome-scale data in (Non)Brood Parasitic Birds"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -80,9 +80,9 @@ indv8 <- ggplot(as, aes(cov, color = chr,y = ..density..)) + geom_freqpoly(alpha
 indv8
 ```
 # Above is the code that will generate the graph formulated below for individual 8. 
-```{r}
-![](/n/holyscratch01/informatics/blangod/hetAtr/02_bams/indv8.png)
-```
+
+![Female Individual 8](/n/holyscratch01/informatics/blangod/hetAtr/02_bams/indv8.png)
+
 #x-axis: coverage, y-axis: density, The autosomes and sex chromosomes of individual 8 shows that the rates of each set of chromosomes differ, this holds to be true in females because the autosomes have half the data that females hold as they have heterozygous sex chromosomes (ZW).
 
 #Example: MALE (individual 3)
@@ -101,20 +101,19 @@ indv3
 ```
 # Above is the code that will generate the graph formulated below for individual 3. 
 
-```{r}
-![Male Indvidual 3](/n/holyscratch01/informatics/blangod/hetAtr/02_bams/indv3.png)
-```
+![Male Individual 3](/n/holyscratch01/informatics/blangod/hetAtr/02_bams/indv3.png)
+
 #x-axis: coverage, y-axis: density, The autosomes and sex chromosomes of individual 3 shows that the rates of each set of chromosomes overlap each other. This holds to be true in males because the autosomes have the same the data that males hold as they have homozygous sex chromosomes (WW).
 
 ## Merged all females into one bam file and all males into another bam file
-```{r}
+```{r, eval = F}
 samtools merge fem.final.bam indv4.final.bam indv5.final.bam indv6.final.bam indv7.final.bam indv8.final.bam indv9.final.bam indv10.final.bam indv14.final.bam
 
 samtools merge male.final.bam indv1.final.bam indv2.final.bam indv3.final.bam indv11.final.bam indv12.final.bam indv13.final.bam
 ```
 
 ## Identified scaffolds associated with sex chromosomes by calculating covergae between the male and female larger combined files 
-```{r}
+```{r, eval = F}
 samtools coverage fem.final.bam > female.out
 samtools coverage male.final.bam > male.out
 ```
@@ -200,7 +199,7 @@ ggplot(male.out, aes(x=V6, y=V9)) + geom_point()
 ggplot(male.out, aes(x=log10(V3), y=log10(V7))) + geom_point()
 ```
 #X & Y axis (V3= end position, V6=coverage, V7= mean depth, V9=mean mapq)
-# Compared comlums to each other within males to explore date and correlation to see if each parameter matched hypotheses and looking to check for outliers that we were not expecting. 
+# Compared comlums to each other within males to see if correlation to each parameter matched hypotheses
 
 
 # Comparing Columns in FEMALES
@@ -263,15 +262,33 @@ W <- scaffold_W %>% mutate(chr = "W")
 auto <- scaffold_auto %>% mutate(chr = "auto")
 Z <- scaffold_Z %>% mutate(chr = "Z")
 all_rel_dp <- rbind(Z, W, auto)
-all_rel_dp <- read_delim('all_rel_dp', delim = "\t", col_names = F) %>%
-  rename(scaffold = X1, rel.dp = X2, chr = X3)
+
 
 ggplot(all_rel_dp, aes(x=as.numeric(as.character(rel.dp)), col=chr)) + geom_histogram(bins=50)
 ```
 #x-axis: relative depth, y-axis: number of scaffolds. This graph shows a more defined representation of the scaffolds sorted by a relative depth value and lables them respectively as W-linked, autosomal, and Z-linked.
 
-## Challenging Hypotheses
+### Challenging Hypotheses
+#Examining the coverage of females versus males in relation to the W chromosome
 ```{r}
-femcov_v_malecov <- all_rel_dp %>% filter(chr == "W") %>% ggplot(aes(x=V6.female, y=V6.male)) + geom_point()
-femcov_v_malecov
+femcov_v_malecovW <- all_rel_dp %>% filter(chr == "W") %>% ggplot(aes(x=V6.female, y=V6.male)) + geom_point()
+femcov_v_malecovW
 ```
+# x-axis: coverage of females, y-axis: coverage of males
+# This graph shows
+
+#Examining the coverage of females versus males in relation to the Z chromosome
+```{r}
+femcov_v_malecovZ <- all_rel_dp %>% filter(chr == "Z") %>% ggplot(aes(x=V6.female, y=V6.male)) + geom_point()
+femcov_v_malecovZ
+```
+# x-axis: coverage of females, y-axis: coverage of males
+#This graph shows 
+
+#Examining the coverage of females versus males in relation to the autosomes
+```{r}
+femcov_v_malecov_auto <- all_rel_dp %>% filter(chr == "auto") %>% ggplot(aes(x=V6.female, y=V6.male)) + geom_point()
+femcov_v_malecov_auto
+```
+# x-axis: coverage of females, y-axis: coverage of males
+# This graph shows
