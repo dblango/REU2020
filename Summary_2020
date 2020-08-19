@@ -271,24 +271,24 @@ ggplot(all_rel_dp, aes(x=as.numeric(as.character(rel.dp)), col=chr)) + geom_hist
 ### Challenging Hypotheses
 #Examining the coverage of females versus males in relation to the W chromosome
 ```{r}
-femcov_v_malecovW <- all_rel_dp %>% filter(chr == "W") %>% ggplot(aes(x=V6.female, y=V6.male)) + geom_point()
+femcov_v_malecovW <- all_rel_dp %>% filter(chr == "W") %>% ggplot(aes(x=V6.female, y=V6.male)) + geom_point(alpha = .2)
 femcov_v_malecovW
 ```
 # x-axis: coverage of females, y-axis: coverage of males
-# This graph shows
+# This graph shows that the females have very high coverage, which entails that maybe some W chromosomes may be classified in error since they have the same trend as autosomes and have higher than expected male coverage, so they could share some homologous characteristics with the Z chromosome. 
 
 #Examining the coverage of females versus males in relation to the Z chromosome
 ```{r}
-femcov_v_malecovZ <- all_rel_dp %>% filter(chr == "Z") %>% ggplot(aes(x=V6.female, y=V6.male)) + geom_point()
+femcov_v_malecovZ <- all_rel_dp %>% filter(chr == "Z") %>% ggplot(aes(x=V6.female, y=V6.male)) + geom_point(alpha = .2)
 femcov_v_malecovZ
 ```
 # x-axis: coverage of females, y-axis: coverage of males
-#This graph shows 
+#This graph shows that the Z chromosome has a very high amount of male coverage, which is expected for a Z linked chromosome. 
 
 #Examining the coverage of females versus males in relation to the autosomes
 ```{r}
-femcov_v_malecov_auto <- all_rel_dp %>% filter(chr == "auto") %>% ggplot(aes(x=V6.female, y=V6.male)) + geom_point()
+femcov_v_malecov_auto <- all_rel_dp %>% filter(chr == "auto") %>% ggplot(aes(x=V6.female, y=V6.male)) + geom_point(alpha = .2) 
 femcov_v_malecov_auto
 ```
 # x-axis: coverage of females, y-axis: coverage of males
-# This graph shows
+# This graph shows exactly what we expected, that the coverage of autosomes have a very high male coverage.
